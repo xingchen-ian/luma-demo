@@ -19,6 +19,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             position: relative;
+            cursor: pointer;
         }
         iframe {
             width: 100%;
@@ -51,9 +52,28 @@
             background: #667eea;
             color: white;
         }
+        .hint {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #666;
+            animation: pulse 2s infinite;
+            z-index: 100;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 0.5; }
+        }
+        .hint.hidden {
+            display: none;
+        }
     </style>
 </head>
-<body>
+<body id="mainBody">
     <iframe 
         src="https://lumalabs.ai/embed/25b6cf96-408b-431b-9938-838d33c56f29?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false" 
         title="Luma AI 3D Scan"
@@ -65,16 +85,30 @@
         <source src="audio.mp3" type="audio/mpeg">
     </audio>
     
-    <button class="sound-btn" id="soundBtn" onclick="toggleSound()">
+    <div class="hint" id="hint">👆 点击任意位置播放声音</div>
+    
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound(event)">
         🔇 点击播放声音
     </button>
     
     <script>
         const audio = document.getElementById('bgAudio');
         const btn = document.getElementById('soundBtn');
+        const body = document.getElementById('mainBody');
+        const hint = document.getElementById('hint');
         let isPlaying = false;
+        let hasInteracted = false;
         
-        function toggleSound() {
+        function startAudio() {
+            if (!hasInteracted) {
+                audio.play();
+                hasInteracted = true;
+                hint.classList.add('hidden');
+            }
+        }
+        
+        function toggleSound(e) {
+            e.stopPropagation();
             if (isPlaying) {
                 audio.pause();
                 btn.textContent = '🔇 点击播放声音';
@@ -86,6 +120,9 @@
             }
             isPlaying = !isPlaying;
         }
+        
+        // Click anywhere to play audio
+        body.addEventListener('click', startAudio);
     </script>
 </body>
 </html>
