@@ -18,12 +18,38 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
             display: block;
+        }
+        .sound-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 16px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .sound-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+        }
+        .sound-btn.playing {
+            background: #667eea;
+            color: white;
         }
     </style>
 </head>
@@ -35,8 +61,31 @@
         allowfullscreen
     ></iframe>
     
-    <audio id="bgAudio" autoplay loop>
+    <audio id="bgAudio" loop>
         <source src="https://cdn.freesound.org/previews/455/455833_10378836-lq.mp3" type="audio/mpeg">
     </audio>
+    
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound()">
+        🔇 点击播放声音
+    </button>
+    
+    <script>
+        const audio = document.getElementById('bgAudio');
+        const btn = document.getElementById('soundBtn');
+        let isPlaying = false;
+        
+        function toggleSound() {
+            if (isPlaying) {
+                audio.pause();
+                btn.textContent = '🔇 点击播放声音';
+                btn.classList.remove('playing');
+            } else {
+                audio.play();
+                btn.textContent = '🔊 关闭声音';
+                btn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
 </body>
 </html>
