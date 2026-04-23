@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Object - Luma AI Scan</title>
+    <title>3D Object Demo</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -20,16 +20,17 @@
             padding: 20px;
         }
         h1 {
-            color: #333;
+            color: white;
             margin-bottom: 20px;
             text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .container {
             width: 100%;
             max-width: 960px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
             overflow: hidden;
         }
         iframe {
@@ -38,15 +39,39 @@
             border: none;
             display: block;
         }
-        .info {
-            padding: 20px;
-            color: #666;
-            text-align: center;
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 12px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+        .audio-control audio {
+            height: 28px;
+        }
+        .audio-toggle {
+            background: #667eea;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .audio-toggle:hover {
+            background: #5a6fd6;
         }
     </style>
 </head>
 <body>
-    <h1>📦 3D Object Scan</h1>
+    <h1>📦 3D Object Demo</h1>
     <div class="container">
         <iframe 
             src="https://lumalabs.ai/embed/25b6cf96-408b-431b-9938-838d33c56f29?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false" 
@@ -55,8 +80,34 @@
             allowfullscreen
         ></iframe>
     </div>
-    <div class="info">
-        <p>Scanned with Luma AI</p>
+    
+    <div class="audio-control">
+        <span>🔊</span>
+        <audio id="bgAudio" loop>
+            <source src="https://freesound.org/data/previews/455/455833_10378836-lq.mp3" type="audio/mpeg">
+        </audio>
+        <button class="audio-toggle" onclick="toggleAudio()">暂停</button>
     </div>
+
+    <script>
+        const audio = document.getElementById('bgAudio');
+        const btn = document.querySelector('.audio-toggle');
+        
+        // Try to autoplay
+        audio.play().catch(() => {
+            // Autoplay blocked, user needs to click
+            btn.textContent = '播放';
+        });
+        
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = '暂停';
+            } else {
+                audio.pause();
+                btn.textContent = '播放';
+            }
+        }
+    </script>
 </body>
 </html>
